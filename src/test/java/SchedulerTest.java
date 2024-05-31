@@ -1,4 +1,4 @@
-import domain.ScheduledRangeWithTask;
+import domain.TaskExecution;
 import domain.Task;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -62,7 +62,7 @@ public class SchedulerTest {
 
         Assertions.assertEquals(1, schedule.stream().filter(r -> r.task().name().equals("T3")).count());
         Assertions.assertEquals(3, schedule.size());
-        Assertions.assertEquals(1, schedule.stream().filter(ScheduledRangeWithTask::deadlineExceeded).count());
+        Assertions.assertEquals(1, schedule.stream().filter(TaskExecution::deadlineExceeded).count());
 
 
     }

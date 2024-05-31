@@ -1,6 +1,6 @@
 package domain;
 
-public record ScheduledRangeWithTask(
+public record TaskExecution(
         Range range,
         Task task,
         boolean deadlineExceeded) {

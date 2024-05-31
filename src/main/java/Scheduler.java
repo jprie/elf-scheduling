@@ -1,12 +1,11 @@
 import domain.ProcessableTask;
 import domain.Range;
-import domain.ScheduledRangeWithTask;
+import domain.TaskExecution;
 import domain.Task;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Scheduler {
 
@@ -16,7 +15,7 @@ public class Scheduler {
         T_MAX = tMax;
     }
 
-    List<ScheduledRangeWithTask> schedule(List<Task> tasks) {
+    List<TaskExecution> schedule(List<Task> tasks) {
 
         // create datastructure to operate on without changing given data
         int index = 0;
@@ -26,7 +25,7 @@ public class Scheduler {
         }
 
         int t = 0;
-        var scheduledRangesWithTask = new ArrayList<ScheduledRangeWithTask>();
+        var scheduledRangesWithTask = new ArrayList<TaskExecution>();
         // schedule processes
         while (t < T_MAX) {
 
@@ -50,8 +49,7 @@ public class Scheduler {
             // deadline = lastDeadLine + Period
             nextTask.updateDeadLine();
 
-            var scheduleWithTask = new ScheduledRangeWithTask(new Range(t, nextT), tasks.get(nextTask.getId()), isTimedOut);
-
+            var scheduleWithTask = new TaskExecution(new Range(t, nextT), tasks.get(nextTask.getId()), isTimedOut);
             scheduledRangesWithTask.add(scheduleWithTask);
 
             // end on first timeout
