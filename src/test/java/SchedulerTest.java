@@ -24,7 +24,7 @@ public class SchedulerTest {
         System.out.println(schedule);
 
         Assertions.assertEquals(5, schedule.size());
-        Assertions.assertEquals(false, schedule.stream().anyMatch(TaskExecution::deadlineExceeded));
+        Assertions.assertFalse(schedule.stream().anyMatch(TaskExecution::deadlineExceeded));
     }
 
     @Test
@@ -63,9 +63,9 @@ public class SchedulerTest {
 
         Assertions.assertEquals(13, schedule.size());
         Assertions.assertFalse(schedule.stream().anyMatch(TaskExecution::deadlineExceeded));
-        Assertions.assertEquals(29-1, schedule.stream()
+        Assertions.assertEquals(29 - 1, schedule.stream()
                 .map(TaskExecution::range)
-                .reduce(new Range(0,0), (r0,r1) -> new Range(r0.start(), r0.end()-r1.start()+r1.end()))
+                .reduce(new Range(0, 0), (r0, r1) -> new Range(r0.start(), r0.end() - r1.start() + r1.end()))
                 .end()
         );
     }
@@ -85,11 +85,28 @@ public class SchedulerTest {
         System.out.println(schedule);
 
         Assertions.assertEquals(7, schedule.size());
-        Assertions.assertEquals(17-2, schedule.stream()
+        Assertions.assertEquals(17 - 2, schedule.stream()
                 .map(TaskExecution::range)
-                .reduce(new Range(0,0), (r0,r1) -> new Range(r0.start(), r0.end()-r1.start()+r1.end()))
+                .reduce(new Range(0, 0), (r0, r1) -> new Range(r0.start(), r0.end() - r1.start() + r1.end()))
                 .end()
         );
+
+    }
+
+    @Test
+    void given3PeriodicTasks1000Ticks_returnNExecutionsWithNIdleTicks() {
+
+        var tasks = List.of(
+                new Task("T1", 3, 7, 20),
+                new Task("T2", 2, 4, 5),
+                new Task("T3", 2, 8, 10)
+        );
+
+//        Scheduler.setTMax(21);
+        var schedule = new Scheduler().schedule(tasks);
+
+        System.out.println(schedule);
+        Assertions.assertFalse(schedule.stream().anyMatch(TaskExecution::deadlineExceeded));
 
     }
 
