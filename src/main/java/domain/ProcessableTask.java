@@ -1,41 +1,64 @@
 package domain;
 
+/**
+ * Unit of work for the EDF scheduler
+ * Stores a reference to the task as well as the state needed for dynamic scheduling
+ */
 public class ProcessableTask {
 
-    private int id;
     private final int computationTime;
-    private int nextDeadLine;
     private final int period;
+    private int nextDeadLine;
+    private int nextPeriodStart;
+    private boolean executed;
+    private final Task task;
 
-    public ProcessableTask(int id, int computationTime, int deadLine, int period) {
-        this.id = id;
+    public ProcessableTask(int computationTime, int deadLine, int period, Task task) {
+        this.task = task;
         this.computationTime = computationTime;
         this.nextDeadLine = deadLine;
         this.period = period;
+        this.nextPeriodStart = 0;
+        this.executed = false;
     }
 
-    public void updateDeadLine() {
+    public static ProcessableTask fromTask(Task task) {
+        return new ProcessableTask(task.computationTime(), task.deadline(), task.optionalPeriod(), task);
+    }
+
+    public void updateNextDeadLineAndPeriodStart() {
 
         nextDeadLine += period;
+        nextPeriodStart += period;
+    }
+
+    public boolean isExecuted() {
+        return executed;
+    }
+
+    public void setExecuted(boolean val) {
+        this.executed = val;
     }
 
     public int getNextDeadLine() {
         return nextDeadLine;
     }
 
+    public int getNextPeriodStart() {
+        return nextPeriodStart;
+    }
+
     public int getComputationTime() {
         return computationTime;
     }
 
-    public static ProcessableTask fromTask(int id, Task task) {
-        return new ProcessableTask(id, task.computationTime(), task.deadline(), task.optionalPeriod());
-    }
+
 
     public int getPeriod() {
         return period;
     }
 
-    public int getId() {
-        return id;
+    public Task getTask() {
+        return task;
     }
 }
