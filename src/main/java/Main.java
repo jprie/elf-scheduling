@@ -1,3 +1,4 @@
+import domain.Scheduler;
 import domain.Task;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public class Main {
                 new Task("T3", 1, 1, 20)
         );
 
-//        Scheduler.setTMax(20);
+//        domain.Scheduler.setTMax(20);
         var schedule = new Scheduler().schedule(tasks);
 
         System.out.println(schedule);

@@ -1,3 +1,5 @@
+package domain;
+
 import domain.ProcessableTask;
 import domain.Range;
 import domain.TaskExecution;

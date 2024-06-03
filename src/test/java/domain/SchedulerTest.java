@@ -1,7 +1,6 @@
-import domain.ProcessableTask;
-import domain.Range;
-import domain.TaskExecution;
-import domain.Task;
+package domain;
+
+import domain.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -102,7 +101,7 @@ public class SchedulerTest {
                 new Task("T3", 2, 8, 10)
         );
 
-//        Scheduler.setTMax(21);
+//        domain.Scheduler.setTMax(21);
         var schedule = new Scheduler().schedule(tasks);
 
         System.out.println(schedule);
