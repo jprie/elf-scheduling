@@ -1,13 +1,9 @@
 package domain;
 
-import domain.ProcessableTask;
-import domain.Range;
-import domain.TaskExecution;
-import domain.Task;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -41,28 +37,27 @@ public class Scheduler {
 
         while (t < T_MAX) {
 
-            // reset isExecuted if period elapsed
+            // reset ready if period elapsed
             for (var pt : processableTasks) {
                 if (t >= pt.getNextPeriodStart()) {
-                    pt.setExecuted(false);
+                    pt.setReady(true);
                 }
             }
 
-            // find task with lowest deadline which was not executed in this period
-            var optNextTask = processableTasks.stream()
-                    .filter(tp -> !tp.isExecuted())
+            // find task with the lowest deadline which was not executed in this period, yet i.e. is ready
+            Optional<ProcessableTask> optNextTask = processableTasks.stream()
+                    .filter(ProcessableTask::isReady)
                     .min(Comparator.comparing(ProcessableTask::getNextDeadLine));
 
 
-            // schedule task
+            // process next task
             if (optNextTask.isPresent()) {
 
                 var nextTask = optNextTask.get();
-                var nextT = t + nextTask.getComputationTime();
-
+                int nextT = t + nextTask.getComputationTime();
                 boolean isTimedOut = nextT - 1 > nextTask.getNextDeadLine();
 
-                // end scheduling if range end exceeds T_MAX
+                // end scheduling if task timed out or range end exceeds T_MAX
                 if (isTimedOut || nextT > T_MAX) {
                     break;
                 }
@@ -72,9 +67,11 @@ public class Scheduler {
                     processableTasks.remove(nextTask);
                 }
 
+                // update state
                 nextTask.updateNextDeadLineAndPeriodStart();
-                nextTask.setExecuted(true);
+                nextTask.setReady(false);
 
+                // schedule task
                 var taskExecution = new TaskExecution(new Range(t, nextT), nextTask.getTask(), isTimedOut);
                 taskExecutions.add(taskExecution);
 

@@ -10,7 +10,7 @@ public class ProcessableTask {
     private final int period;
     private int nextDeadLine;
     private int nextPeriodStart;
-    private boolean executed;
+    private boolean ready;
     private final Task task;
 
     public ProcessableTask(int computationTime, int deadLine, int period, Task task) {
@@ -19,7 +19,7 @@ public class ProcessableTask {
         this.nextDeadLine = deadLine;
         this.period = period;
         this.nextPeriodStart = 0;
-        this.executed = false;
+        this.ready = true;
     }
 
     public static ProcessableTask fromTask(Task task) {
@@ -32,12 +32,20 @@ public class ProcessableTask {
         nextPeriodStart += period;
     }
 
-    public boolean isExecuted() {
-        return executed;
+    public void setNextDeadLine(int nextDeadLine) {
+        this.nextDeadLine = nextDeadLine;
     }
 
-    public void setExecuted(boolean val) {
-        this.executed = val;
+    public void setNextPeriodStart(int nextPeriodStart) {
+        this.nextPeriodStart = nextPeriodStart;
+    }
+
+    public boolean isReady() {
+        return ready;
+    }
+
+    public void setReady(boolean ready) {
+        this.ready = ready;
     }
 
     public int getNextDeadLine() {
