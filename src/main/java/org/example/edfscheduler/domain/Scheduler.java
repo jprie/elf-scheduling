@@ -1,4 +1,4 @@
-package domain;
+package org.example.edfscheduler.domain;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -32,14 +32,14 @@ public class Scheduler {
                 .map(ProcessableTask::fromTask)
                 .collect(Collectors.toCollection(ArrayList::new));
 
-        int t = 0;
+        int currentTime = 0;
         var taskExecutions = new ArrayList<TaskExecution>();
 
-        while (t < T_MAX) {
+        while (currentTime < T_MAX && !processableTasks.isEmpty()) {
 
             // reset ready if period elapsed
             for (var pt : processableTasks) {
-                if (t >= pt.getNextPeriodStart()) {
+                if (currentTime >= pt.getNextPeriodStart()) {
                     pt.setReady(true);
                 }
             }
@@ -54,11 +54,11 @@ public class Scheduler {
             if (optNextTask.isPresent()) {
 
                 var nextTask = optNextTask.get();
-                int nextT = t + nextTask.getComputationTime();
-                boolean isTimedOut = nextT - 1 > nextTask.getNextDeadLine();
+                int timeEndOfTask = currentTime + nextTask.getComputationTime();
+                boolean isTimedOut = nextTask.getNextDeadLine() < timeEndOfTask - 1; // FIXME: must really be done before deadline?
 
                 // end scheduling if task timed out or range end exceeds T_MAX
-                if (isTimedOut || nextT > T_MAX) {
+                if (isTimedOut || timeEndOfTask > T_MAX) {
                     break;
                 }
 
@@ -72,14 +72,14 @@ public class Scheduler {
                 nextTask.setReady(false);
 
                 // schedule task
-                var taskExecution = new TaskExecution(new Range(t, nextT), nextTask.getTask(), isTimedOut);
+                var taskExecution = new TaskExecution(new Range(currentTime, timeEndOfTask), nextTask.getTask(), isTimedOut);
                 taskExecutions.add(taskExecution);
 
-                t = nextT;
+                currentTime = timeEndOfTask;
 
             } else {
                 // no task ready - continue
-                t++;
+                currentTime++;
             }
         }
 

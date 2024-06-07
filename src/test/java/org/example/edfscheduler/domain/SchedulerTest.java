@@ -1,6 +1,9 @@
-package domain;
+package org.example.edfscheduler.domain;
 
-import domain.*;
+import org.example.edfscheduler.domain.Range;
+import org.example.edfscheduler.domain.Scheduler;
+import org.example.edfscheduler.domain.Task;
+import org.example.edfscheduler.domain.TaskExecution;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

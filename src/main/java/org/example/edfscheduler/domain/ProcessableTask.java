@@ -1,4 +1,4 @@
-package domain;
+package org.example.edfscheduler.domain;
 
 /**
  * Unit of work for the EDF scheduler
@@ -30,14 +30,6 @@ public class ProcessableTask {
 
         nextDeadLine += period;
         nextPeriodStart += period;
-    }
-
-    public void setNextDeadLine(int nextDeadLine) {
-        this.nextDeadLine = nextDeadLine;
-    }
-
-    public void setNextPeriodStart(int nextPeriodStart) {
-        this.nextPeriodStart = nextPeriodStart;
     }
 
     public boolean isReady() {

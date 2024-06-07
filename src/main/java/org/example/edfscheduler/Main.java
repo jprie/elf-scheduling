@@ -1,5 +1,7 @@
-import domain.Scheduler;
-import domain.Task;
+package org.example.edfscheduler;
+
+import org.example.edfscheduler.domain.Scheduler;
+import org.example.edfscheduler.domain.Task;
 
 import java.util.List;
 

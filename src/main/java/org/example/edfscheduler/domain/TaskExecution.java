@@ -1,4 +1,4 @@
-package domain;
+package org.example.edfscheduler.domain;
 
 public record TaskExecution(
         Range range,
